@@ -1,25 +1,50 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState,useEffect} from 'react';
+import {BrowserRouter as Router,Routes,Route} from 'react-router-dom';
+import UploadImage from './UploadImage.js';
+import Navbar from './Navbar.js';
+import UploadSuccess from './UploadSuccess.js';
+function App(){
+  const [walletAddress,setWalletAddress]=useState("");
+    useEffect(()=>{
+    // getWalletAddress();
+    addWalletListener();
+        });
+        function addWalletListener(){
+          if(window.ethereum){
+            window.ethereum.on("accountsChanged",(accounts)=>{
+              if(accounts.length>0){
+                setWalletAddress(accounts[0]);
+              }else{
+                setWalletAddress("")
+              }
+            });
+    
+          }else{
+            alert("Please install metaMask");
+          }
+        }
+  async function getWalletAddress(){
+    if(window.ethereum){
+        const accounts=await window.ethereum.request({method:'eth_requestAccounts'});
+        const account=accounts[0];
+        setWalletAddress(account);
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    }else{
+        alert("Please install MetaMask");
+    }
 }
-
+    return(
+        <div id="container">
+         <Router>
+          <Navbar onConnectWallet={getWalletAddress} walletAddress={walletAddress}/>
+          <Routes>
+            <Route path="/" exact element={<UploadImage address={walletAddress}/>}/>
+            <Route path="/success" element={<UploadSuccess/>}/>
+          </Routes>
+        
+         </Router>
+        </div>
+    );
+}
 export default App;
