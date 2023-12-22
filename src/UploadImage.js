@@ -17,7 +17,7 @@ function UploadImage({address}){
     };
     const handleUpload=async(event)=>{
         event.preventDefault();
-        if(fileInputRef.current.files.length==0){
+        if(fileInputRef.current.files.length===0){
             alert('Please select a file to upload');
             return;
         }
@@ -46,7 +46,7 @@ function UploadImage({address}){
             <h1>Upload Image to IPFS and Mint NFT</h1>
             <form className="upload-form" onSubmit={handleUpload}>
                 <label htmlFor="title">Title *</label>
-                <input type="text" id="title" placeholder="Enter iamge title" value={title} onChange={(e)=>setTitle(e.target.value)}required/>
+                <input type="text" id="title" placeholder="Enter iamge title" value={title} onChange={(e)=>setTitle(e.target.value)} required/>
                 <label htmlFor="description">Description</label>
                 <textarea id="description" placeholder="description iamge " value={description} onChange={(e)=>setDescription(e.target.value)}/>
                 <label htmlFor="file">Image *</label>
